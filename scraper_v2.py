@@ -71,11 +71,11 @@ for g in groups:
     target_group=groups[i]
     print(gr+'[+] Fetching Members...')
     print(f"t_group: {target_group}")
-    '''time.sleep(1)
+    time.sleep(1)
     all_participants = []
     all_participants = client.get_participants(target_group, aggressive=True)
-     
-    print(gr+'[+] Saving In file...')
+    print(all_participants)
+    '''print(gr+'[+] Saving In file...')
     time.sleep(1)
     with open("members.csv","w",encoding='UTF-8') as f:
         writer = csv.writer(f,delimiter=",",lineterminator="\n")
