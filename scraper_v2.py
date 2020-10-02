@@ -81,9 +81,9 @@ i=0
 #df = df.assign(**dict.fromkeys(headers,0))
 for g in groups:
     print(gr+'['+cy+str(i)+']' + ' - ' + g.title)
-    target_group=groups[i]
+    target_group=groups[4]
     print(gr+'[+] Fetching Members...')
-    #print(f"t_group: {target_group}")
+    print(f"t_group: {target_group.title}")
     time.sleep(1)
     all_participants = []
     all_participants = client.get_participants(target_group,aggressive=True)
@@ -98,7 +98,7 @@ for g in groups:
         #break
 
     i+=1
-    #break
+    break
 print(df)
 xl_file = f"group_export{getTimeStamp()}.xlsx"
 df.to_excel(xl_file,index=False)
