@@ -1,10 +1,17 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
-import os, sys, pandas
+import os, sys, pandas, openpyxl
 import configparser
 import csv
 import time
+import datetime as dt
+
+def getTimeStamp():
+    d_date = str(dt.datetime.now().date())
+    d_time = dt.datetime.now().time()
+    d_date += ("_" +str(d_time.hour) +"_" +str(d_time.minute) +"_" +str(d_time.second))
+    return d_date
 
 re="\033[1;31m"
 gr="\033[1;32m"
@@ -82,15 +89,23 @@ for g in groups:
     all_participants = client.get_participants(target_group,aggressive=True)
     temp_dict = {}
     for user in all_participants:
-        temp_dict["group"] = target_group.title.encode
+        temp_dict["group"] = target_group.title
         for h in headers:
             if h != "group":
                 temp_dict[h] = user.to_dict()[h]
         #print(temp_dict)
         df = df.append(temp_dict, ignore_index=True)
+        #break
 
     i+=1
+    #break
 print(df)
-df.to_csv("group_export.csv",index=False)
-     
-print('')
+xl_file = f"group_export{getTimeStamp()}.xlsx"
+df.to_excel(xl_file,index=False)
+wb = openpyxl.load_workbook(xl_file)
+ws = wb.worksheets[0]
+tbl = openpyxl.worksheet.table.Table(displayName="groups",ref=f"A1:{chr(len(df.columns)+64)}{len(df['group'])+1}")
+style = openpyxl.worksheet.table.TableStyleInfo(name="TableStyleMedium9",showFirstColumn=False,showLastColumn=False,showRowStripes=True,showColumnStripes=False)
+tbl.tableStyleInfo = style
+ws.add_table(tbl)
+wb.save(xl_file)
