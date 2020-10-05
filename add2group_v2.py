@@ -47,7 +47,7 @@ banner()
 input_file = sys.argv[1]
 users = []
 df = pd.read_csv(input_file)
-df['access_hash'] = pd.to_numeric(df['access_hash'], downcast='integer')
+df['access_hash'] = pd.to_numeric(df['access_hash'], downcast='long')
 df['id'] = pd.to_numeric(df['id'], downcast='integer')
 df = df.fillna("")
 headers = list(df.columns)
