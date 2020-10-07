@@ -86,7 +86,7 @@ print("""
     To cancel scraping, enter 'x' or 'c'.
 """)
 g_index = input(gr+"[+] Enter a Number : "+re)
-if g_index == "c" or g_index == "x":
+if g_index == "c" or g_index == "x" or g_index == "":
     print("\nScraper cancelled.\n")
 
 elif g_index == "*":

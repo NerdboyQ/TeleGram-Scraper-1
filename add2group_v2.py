@@ -47,7 +47,7 @@ banner()
 input_file = sys.argv[1]
 users = []
 df = pd.read_csv(input_file)
-df['access_hash'] = pd.to_numeric(df['access_hash'], downcast='integer')
+df['access_hash'] = df['access_hash'].astype('int64')
 df['id'] = pd.to_numeric(df['id'], downcast='integer')
 df = df.fillna("")
 headers = list(df.columns)
@@ -83,39 +83,50 @@ for group in groups:
     print(str(i) + '- ' + group.title)
     i+=1
  
+print('')
+print("""
+    To cancel scraping, enter 'x' or 'c'.
+""")
+
 g_index = input(gr+"Enter a Number : "+re)
-target_group=groups[int(g_index)]
- 
-target_group_entity = InputPeerChannel(target_group.id,target_group.access_hash)
- 
-print(gr+"[1] add member by user ID\n[2] add member by username ")
-mode = int(input(gr+"Input : "+re)) 
-n = 0
- 
-for user in users:
-    n += 1
-    #print(f"user: {user}")
-    if n % 50 == 0:
-        time.sleep(900)
-    try:
-        print ("Adding {}".format(user['id']))
-        if mode == 1:
-            if user['username'] == "":
-                continue
-            user_to_add = client.get_input_entity(user['username'])
-        elif mode == 2:
-            user_to_add = InputPeerUser(user['id'], user['access_hash'])
-        else:
-            sys.exit(re+"[!] Invalid Mode Selected. Please Try Again.")
-        client(InviteToChannelRequest(target_group_entity,[user_to_add]))
-        print(gr+"[+] Waiting for 60-180 Seconds...")
-        time.sleep(random.randrange(60, 180))
-    except PeerFloodError:
-        print(re+"[!] Getting Flood Error from telegram. \n[!] Script is stopping now. \n[!] Please try again after some time.")
-    except UserPrivacyRestrictedError:
-        print(re+"[!] The user's privacy settings do not allow you to do this. Skipping.")
-    except:
-        traceback.print_exc()
-        print(re+"[!] Unexpected Error")
-        continue
+if g_index == "c" or g_index == "x" or g_index == "":
+    print("\nAdd2Group cancelled.\n")
+
+else:
+	target_group=groups[int(g_index)]
+	 
+	target_group_entity = InputPeerChannel(target_group.id,target_group.access_hash)
+	 
+	print(gr+"[1] add member by user ID\n[2] add member by username ")
+
+
+	mode = int(input(gr+"Input : "+re)) 
+	n = 0
+	 
+	for user in users:
+	    n += 1
+	    #print(f"user: {user}")
+	    if n % 50 == 0:
+	        time.sleep(900)
+	    try:
+	        print ("Adding {}".format(user['id']))
+	        if mode == 1:
+	            if user['username'] == "":
+	                continue
+	            user_to_add = client.get_input_entity(user['username'])
+	        elif mode == 2:
+	            user_to_add = InputPeerUser(user['id'], user['access_hash'])
+	        else:
+	            sys.exit(re+"[!] Invalid Mode Selected. Please Try Again.")
+	        client(InviteToChannelRequest(target_group_entity,[user_to_add]))
+	        print(gr+"[+] Waiting for 60-180 Seconds...")
+	        time.sleep(random.randrange(60, 180))
+	    except PeerFloodError:
+	        print(re+"[!] Getting Flood Error from telegram. \n[!] Script is stopping now. \n[!] Please try again after some time.")
+	    except UserPrivacyRestrictedError:
+	        print(re+"[!] The user's privacy settings do not allow you to do this. Skipping.")
+	    except:
+	        traceback.print_exc()
+	        print(re+"[!] Unexpected Error")
+	        continue
 
