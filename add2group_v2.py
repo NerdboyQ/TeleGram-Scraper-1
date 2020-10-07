@@ -47,14 +47,14 @@ banner()
 input_file = sys.argv[1]
 users = []
 df = pd.read_csv(input_file)
-df['access_hash'] = pd.to_numeric(df['access_hash'], downcast='long')
+df['access_hash'] = pd.to_numeric(df['access_hash'], downcast='integer')
 df['id'] = pd.to_numeric(df['id'], downcast='integer')
 df = df.fillna("")
 headers = list(df.columns)
 for i in range(0,len(df.index)):
     item = df.iloc[i].to_dict()
     users.append(item)
-    print(item)
+    #print(item)
 
 chats = []
 last_date = None
